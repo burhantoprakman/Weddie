@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Home"
+        android:icon="@drawable/photos_icon"/>
+
+    <item
+        android:id="@+id/photosFragment"
+        android:title="Photos"
+        android:icon="@drawable/photos_icon"/>
+
+    <item
+        android:id="@+id/fabPlaceHolder"
+        android:title="" />
+
+    <item
+        android:id="@+id/guestBookFragment"
+        android:title="GuestBook"
+        android:icon="@drawable/photos_icon"/>
+
+    <item
+        android:id="@+id/giftingFragment"
+        android:title="Gifting"
+        android:icon="@drawable/photos_icon"/>
+</menu>
