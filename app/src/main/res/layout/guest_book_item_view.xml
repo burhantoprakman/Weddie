@@ -24,27 +24,35 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/photos_icon" />
+            tools:src="@drawable/ic_photos" />
 
         <TextView
             android:id="@+id/tv_guest_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_guest_photo"
             app:layout_constraintTop_toTopOf="@+id/iv_guest_photo"
-            tools:text="SEDAT AT AT" />
+            tools:text="SEDAT AT" />
 
         <TextView
             android:id="@+id/tv_guest_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="2"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_guest_photo"
             app:layout_constraintTop_toBottomOf="@+id/tv_guest_name"
-            tools:text="HADI BAKALIM GECMIS OLSUN" />
+            tools:text="HADI BAKALIM GECMIS OLSUN HAYDA HUYDA TEXT GOZUKMUYOR BU NE LAA " />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

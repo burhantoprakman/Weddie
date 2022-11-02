@@ -1,10 +1,7 @@
 package com.bidugunapp.ui.fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,10 +44,12 @@ class GuestBookFragment : Fragment(R.layout.fragment_guest_book) {
 
 
         }
-        swipe_refresh.setOnRefreshListener {
-          swipe_refresh.isRefreshing = false
-            viewModel.getGuestBookList()
-        }
+
+        //TODO : Simdilik swipe refresh kalsin
+//        swipe_refresh.setOnRefreshListener {
+//          swipe_refresh.isRefreshing = false
+//            viewModel.getGuestBookList()
+//        }
 
         guestBookAdapter.setOnItemClickListener {
             //OPEN DETAIL SCREEN

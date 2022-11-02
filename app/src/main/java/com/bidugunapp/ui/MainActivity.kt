@@ -2,10 +2,16 @@ package com.bidugunapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bidugunapp.R
@@ -22,20 +28,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
     lateinit var guestBookViewModel: GuestBookViewModel
     lateinit var homePageViewModel : HomePageViewModel
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        bottomNavigationView.setupWithNavController(mainNavHostFragment.findNavController())
-        bottomNavigationView.background = null
-        bottomNavigationView.menu.get(2).isEnabled = false
-
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.mainNavHostFragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        setupActionBarWithNavController(navController)
 
         //Guestbook Viewmodel create
         val guestBookRepository = GuestBookRepository()
@@ -47,5 +43,27 @@ class MainActivity : AppCompatActivity() {
         val homePageViewModelFactory = HomePageViewModelFactory(homePageRepository)
         homePageViewModel = ViewModelProvider(this,homePageViewModelFactory).get(HomePageViewModel::class.java)
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        bottomNavigationView.setupWithNavController(mainNavHostFragment.findNavController())
+        bottomNavigationView.background = null
+        bottomNavigationView.menu[2].isEnabled = false
+
+
+        //Action bar implementation
+        setSupportActionBar(toolBar)
+        navController = findNavController(R.id.mainNavHostFragment)
+        val config = AppBarConfiguration(navController.graph)
+        toolBar.setupWithNavController(navController,config)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.chat_menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 }

@@ -13,6 +13,6 @@ data class EventInfo(
     val openChatOnay: Boolean,
     val photoOnay: Boolean,
     val photos: List<String>,
-    val text: Any,
+    val text: String,
     val waitingRoomOnay: Boolean
 )

@@ -5,8 +5,8 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface GuestBookAPI {
-    @GET("/WNUKBn/guestBook")
+    @GET("/guestBook")
     suspend fun getGuestBookList(
 
-    ) : Response<List<GuestBook>>
+    ): Response<GuestBook>
 }

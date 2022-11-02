@@ -10,23 +10,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class HomePageViewModel(private val homePageRepository : HomePageRepository) : ViewModel() {
-     val homePageInfo  : MutableLiveData<Resources<EventInfo>> = MutableLiveData()
+class HomePageViewModel(private val homePageRepository: HomePageRepository) : ViewModel() {
+    val eventInfoList: MutableLiveData<Resources<EventInfo>> = MutableLiveData()
 
     init {
-        getHomePageInfo()
-    }
-    fun getHomePageInfo() = viewModelScope.launch(Dispatchers.IO){
-        homePageInfo.postValue(Resources.Loading())
-        val response = homePageRepository.getHomePageInfo()
-        homePageInfo.postValue(handleHomePageInfo(response))
+        getEventsInfo()
     }
 
-    private fun handleHomePageInfo(response : Response<EventInfo>)
+    private fun getEventsInfo() = viewModelScope.launch(Dispatchers.IO) {
+        eventInfoList.postValue(Resources.Loading())
+        val response = homePageRepository.getEventInfo()
+        eventInfoList.postValue(handleEventInfo(response))
+    }
+
+    private fun handleEventInfo(response: Response<EventInfo>)
             : Resources<EventInfo> {
-        if(response.isSuccessful){
-            response.body()?.let{
-                    resultResponse ->
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
                 return Resources.Success(resultResponse)
             }
         }

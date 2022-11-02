@@ -14,7 +14,6 @@ class PhotosFragment : Fragment(R.layout.fragment_photos) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Toast.makeText(context,"PHOTOS", Toast.LENGTH_SHORT).show()
         return super.onCreateView(inflater, container, savedInstanceState)
 
     }

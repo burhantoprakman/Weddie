@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     android:background="@color/base_background_color"
     tools:context=".ui.MainActivity">
+    
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@color/home_screen_text_color"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -45,6 +54,9 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/photos_icon"
+        android:backgroundTint="@color/home_screen_text_color"
+        app:backgroundTint="@color/white"
+        app:borderWidth="2dp"
+        android:src="@drawable/ic_videocam"
         app:layout_anchor="@id/bottomAppBar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

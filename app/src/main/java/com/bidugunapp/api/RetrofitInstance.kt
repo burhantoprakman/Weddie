@@ -20,10 +20,10 @@ class RetrofitInstance   {
                 .client(client)
                 .build()
         }
-        val guestBookApi by lazy {
+        val guestBookApi: GuestBookAPI by lazy {
             retrofit.create(GuestBookAPI::class.java)
         }
-        val homePageApi by lazy {
+        val homePageApi : HomePageAPI by lazy {
             retrofit.create(HomePageAPI::class.java)
         }
     }

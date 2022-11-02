@@ -7,17 +7,22 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.bidugunapp.ui.fragments.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="Home" />
     <fragment
         android:id="@+id/photosFragment"
         android:name="com.bidugunapp.ui.fragments.PhotosFragment"
-        android:label="PhotosFragment" />
+        android:label="Photos" />
     <fragment
         android:id="@+id/giftingFragment"
         android:name="com.bidugunapp.ui.fragments.GiftingFragment"
-        android:label="GiftingFragment" />
+        android:label="Gifting" />
     <fragment
         android:id="@+id/guestBookFragment"
         android:name="com.bidugunapp.ui.fragments.GuestBookFragment"
-        android:label="GuestBookFragment" />
+        android:label="Guest Book" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.bidugunapp.ui.fragments.ChatFragment"
+        android:label="Chat" />
+
 </navigation>

@@ -14,7 +14,6 @@ class GiftingFragment : Fragment(R.layout.fragment_gifting) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Toast.makeText(context,"GIFTING", Toast.LENGTH_SHORT).show()
         return super.onCreateView(inflater, container, savedInstanceState)
 
     }
