@@ -19,8 +19,6 @@ import com.bidugunapp.ui.MainActivity
 import com.bidugunapp.util.Constants.Companion.HOME_PAGE_PHOTOS_DELAY_TIME_MS
 import com.bidugunapp.viewmodel.HomePageViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -112,5 +110,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             page.scaleY = 0.85f + r * 0.14f
         }
         viewPager.setPageTransformer(transformer)
+
+
     }
 }

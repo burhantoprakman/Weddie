@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "623101747819",
+    "project_id": "weddietest",
+    "storage_bucket": "weddietest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623101747819:android:ad78998166582c5d84c72e",
+        "android_client_info": {
+          "package_name": "com.bidugunapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623101747819-u9ephb6cb0e734a0ck7hfhdtat3nn5ei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnmEzPv6xaIli-PYhs1hb23qOd3yrrdEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623101747819-u9ephb6cb0e734a0ck7hfhdtat3nn5ei.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
