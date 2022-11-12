@@ -4,21 +4,31 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bidugunapp.R
 import com.bidugunapp.adapters.GuestBookAdapter
+import com.bidugunapp.repository.GuestBookRepository
 import com.bidugunapp.resources.Resources
 import com.bidugunapp.ui.MainActivity
 import com.bidugunapp.viewmodel.GuestBookViewModel
 import kotlinx.android.synthetic.main.fragment_guest_book.*
 
 class GuestBookFragment : Fragment(R.layout.fragment_guest_book) {
-    private lateinit var viewModel : GuestBookViewModel
-    lateinit var guestBookAdapter  : GuestBookAdapter
+    private lateinit var guestBookAdapter  : GuestBookAdapter
+    private val guestBookRepository = GuestBookRepository()
+
+    private val viewModel: GuestBookViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+        }
+        ViewModelProvider(
+            this,
+            GuestBookViewModel.GuestBookViewModelFactory(activity.application, guestBookRepository)
+        )[GuestBookViewModel::class.java]
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as MainActivity).guestBookViewModel
         setUpAdapter()
         viewModel.guestBookList.observe(viewLifecycleOwner) { response ->
             when (response) {

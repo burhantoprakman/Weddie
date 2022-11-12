@@ -1,17 +1,28 @@
 package com.bidugunapp.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import com.bidugunapp.MyApplication
 import com.bidugunapp.model.EventInfo
 import com.bidugunapp.repository.HomePageRepository
 import com.bidugunapp.resources.Resources
+import com.bidugunapp.worker.RefreshDataWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class HomePageViewModel(private val homePageRepository: HomePageRepository) : ViewModel() {
+
+class HomePageViewModel(
+    application: Application,
+    private val homePageRepository: HomePageRepository
+) : AndroidViewModel(application) {
     val eventInfoList: MutableLiveData<Resources<EventInfo>> = MutableLiveData()
+    var isReady = false
+
+
 
     init {
         getEventsInfo()
@@ -21,6 +32,7 @@ class HomePageViewModel(private val homePageRepository: HomePageRepository) : Vi
         eventInfoList.postValue(Resources.Loading())
         val response = homePageRepository.getEventInfo()
         eventInfoList.postValue(handleEventInfo(response))
+        isReady = true
     }
 
     private fun handleEventInfo(response: Response<EventInfo>)
@@ -31,5 +43,15 @@ class HomePageViewModel(private val homePageRepository: HomePageRepository) : Vi
             }
         }
         return Resources.Error(response.message())
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    class HomePageViewModelFactory(
+        val application: Application,
+        private val repository: HomePageRepository
+    ) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return HomePageViewModel(application, repository) as T
+        }
     }
 }

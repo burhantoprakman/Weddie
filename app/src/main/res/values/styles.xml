@@ -12,4 +12,10 @@
         <item name="android:textColor">@color/home_screen_text_color</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_emoji</item>
+        <item name="postSplashScreenTheme">@style/Theme.BiDugunApp</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+    </style>
 </resources>

@@ -1,7 +1,10 @@
 package com.bidugunapp.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.bidugunapp.model.GuestBook
 import com.bidugunapp.model.GuestBookResponse
@@ -11,7 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class GuestBookViewModel(private val repository: GuestBookRepository) : ViewModel() {
+class GuestBookViewModel(application: Application, private val repository: GuestBookRepository) :
+    AndroidViewModel(application) {
 
     val guestBookList: MutableLiveData<Resources<List<GuestBookResponse>>> = MutableLiveData()
 
@@ -35,5 +39,13 @@ class GuestBookViewModel(private val repository: GuestBookRepository) : ViewMode
         return Resources.Error(response.message())
     }
 
-
+    @Suppress("UNCHECKED_CAST")
+    class GuestBookViewModelFactory(
+        private val application: Application,
+        private val repository: GuestBookRepository
+    ) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return GuestBookViewModel(application, repository) as T
+        }
+    }
 }

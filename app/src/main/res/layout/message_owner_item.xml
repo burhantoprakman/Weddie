@@ -13,15 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="4dp"
-        android:backgroundTint="@color/purple_200"
+        android:backgroundTint="@color/home_screen_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingEnd="64dp"
-            android:paddingStart="8dp">
+            android:paddingStart="2dp">
 
             <TextView
                 android:id="@+id/tv_ownerMessageText"
@@ -31,7 +30,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textSize="16sp"
-                android:textColor="@color/black"
+                android:paddingEnd="64dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 tools:text="MESSAGE ALOO" />
 
             <TextView
@@ -39,6 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_ownerMessageText"
                 tools:text="ZAMAN" />
         </androidx.constraintlayout.widget.ConstraintLayout>

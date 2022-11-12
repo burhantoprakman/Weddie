@@ -3,30 +3,35 @@ package com.bidugunapp.viewmodel
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.provider.Settings
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bidugunapp.MyApplication
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.bidugunapp.model.MessageInfo
+import com.bidugunapp.model.PushNotification
+import com.bidugunapp.repository.ChatRepository
 import com.bidugunapp.resources.Resources
-import com.bidugunapp.services.FirebaseNotificationService
-import com.bidugunapp.ui.MainActivity
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 @SuppressLint("HardwareIds")
-class ChatViewModel(application: Application) : ViewModel() {
+class ChatViewModel(application: Application, repository: ChatRepository) :
+    AndroidViewModel(application) {
     var messageList: MutableLiveData<Resources<List<MessageInfo>>> = MutableLiveData()
     private var userId: String?
     private var databaseReference = FirebaseDatabase.getInstance().reference
-    private var application: Application
+    private val repository: ChatRepository
     var list: MutableList<MessageInfo> = ArrayList()
+
+    var pushNotificationResponse: String = ""
 
     init {
         databaseReference = FirebaseDatabase.getInstance().getReference("Messages")
-        this.application = application
+        this.repository = repository
+
         //TODO Bu dogru durmuyor
         val sharedPreference =
             application.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
@@ -49,7 +54,6 @@ class ChatViewModel(application: Application) : ViewModel() {
                         list.add(it)
                     }
                 }
-
                 messageList.postValue(Resources.Loading())
                 messageList.postValue(Resources.Success(list))
             }
@@ -59,4 +63,21 @@ class ChatViewModel(application: Application) : ViewModel() {
             }
         })
     }
+
+    fun sendNotification(pushNotification: PushNotification) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.sendNotification(pushNotification)
+            pushNotificationResponse = response.message()
+        }
+
+    @Suppress("UNCHECKED_CAST")
+    class ChatViewModelFactory(
+        private val application: Application,
+        private val repository: ChatRepository
+    ) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ChatViewModel(application, repository) as T
+        }
+    }
 }
+

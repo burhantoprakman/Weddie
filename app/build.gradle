@@ -21,7 +21,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 
@@ -94,7 +94,17 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.0'
     implementation 'com.google.firebase:firebase-messaging:23.1.0'
+    implementation 'com.google.firebase:firebase-messaging-directboot:23.1.0'
 
-// Firebase Auth
+    //Splash Screen
+    implementation 'androidx.core:core-splashscreen:1.0.0'
+
+    // Firebase Auth
     implementation 'com.google.firebase:firebase-auth-ktx'
+
+    //WorkManager
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
+    //Timber
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

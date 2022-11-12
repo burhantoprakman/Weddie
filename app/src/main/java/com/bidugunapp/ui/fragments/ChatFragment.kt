@@ -2,6 +2,7 @@ package com.bidugunapp.ui.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -9,26 +10,40 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bidugunapp.R
 import com.bidugunapp.adapters.ChatAdapter
 import com.bidugunapp.model.MessageInfo
+import com.bidugunapp.model.NotificationData
+import com.bidugunapp.model.PushNotification
+import com.bidugunapp.repository.ChatRepository
 import com.bidugunapp.resources.Resources
 import com.bidugunapp.services.FirebaseNotificationService
 import com.bidugunapp.ui.MainActivity
 import com.bidugunapp.viewmodel.ChatViewModel
+import com.bidugunapp.viewmodel.GuestBookViewModel
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.RemoteMessage
 import kotlinx.android.synthetic.main.fragment_chat.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
-    private lateinit var chatViewModel: ChatViewModel
     private var databaseReference = FirebaseDatabase.getInstance().reference
     private lateinit var chatAdapter: ChatAdapter
-    private val firebaseNotificationService = FirebaseNotificationService()
-    lateinit var userId : String
+    lateinit var userId: String
+    private val chatRepository = ChatRepository()
+
+    private val chatViewModel: ChatViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+        }
+        ViewModelProvider(
+            this,
+            ChatViewModel.ChatViewModelFactory(activity.application, chatRepository)
+        )[ChatViewModel::class.java]
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -41,15 +56,24 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             smoothScrollToPosition(chatAdapter.itemCount)
         }
         databaseReference = FirebaseDatabase.getInstance().getReference("Messages")
-        chatViewModel = (activity as MainActivity).chatViewModel
 
-        val sharedPreference = context?.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+        val sharedPreference =
+            context?.getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
         userId = sharedPreference?.getString("userId", "").toString()
 
         btn_sendMessage.setOnClickListener {
             val time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
             chatViewModel.createUser(et_message.text.toString(), time)
             et_message.text.clear()
+
+            chatViewModel.sendNotification(
+                PushNotification(
+                    NotificationData(
+                        userId,
+                        "HEYY"
+                    ), "/chats"
+                )
+            )
         }
 
         ib_attachment.setOnClickListener {
@@ -65,15 +89,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     chatResponse.data?.let {
                         chatAdapter.chatList = it as MutableList<MessageInfo>
                         rv_chat.smoothScrollToPosition(it.size)
-                    /*    for(message in it){
-                            if (message.userId == userId) {
-                                firebaseNotificationService.pushNotification(
-                                    message.userId,
-                                    message.message
-                                )
-                            }
-                        }*/
-
                         chatAdapter.notifyDataSetChanged()
                     }
                 }

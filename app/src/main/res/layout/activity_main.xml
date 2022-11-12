@@ -13,8 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         app:titleCentered="true"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="@color/home_screen_text_color"
-        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"/>
+        app:titleTextColor="@color/home_screen_text_color"/>
 
     <FrameLayout
         android:layout_width="match_parent"

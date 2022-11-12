@@ -7,11 +7,14 @@ import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.bidugunapp.R
 import com.bidugunapp.adapters.HomePageViewPagerAdapter
 import com.bidugunapp.resources.Resources
@@ -22,18 +25,18 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlin.math.abs
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
-    private lateinit var viewModel: HomePageViewModel
     private lateinit var viewPager: ViewPager2
     private lateinit var handler: Handler
+    private lateinit var homePageViewModel : HomePageViewModel
     private lateinit var adapter: HomePageViewPagerAdapter
     private var photosList: MutableList<String> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = (activity as MainActivity).homePageViewModel
+        homePageViewModel = (activity as MainActivity).homePageViewModel
         setUpAdapter()
         setUpTransformer()
-        viewModel.eventInfoList.observe(viewLifecycleOwner) { response ->
+        homePageViewModel.eventInfoList.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resources.Success -> {
                     response.data?.let { eventResponse ->
@@ -110,7 +113,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             page.scaleY = 0.85f + r * 0.14f
         }
         viewPager.setPageTransformer(transformer)
-
-
     }
 }

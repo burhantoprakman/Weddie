@@ -7,6 +7,5 @@ import retrofit2.http.GET
 interface GuestBookAPI {
     @GET("/guestBook")
     suspend fun getGuestBookList(
-
     ): Response<GuestBook>
 }

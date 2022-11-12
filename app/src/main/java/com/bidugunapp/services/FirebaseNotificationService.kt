@@ -7,9 +7,11 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bidugunapp.R
+import com.bidugunapp.model.MessageInfo
 import com.bidugunapp.ui.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -25,18 +27,20 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         sendRegistrationToServer(token)
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.e("MESSAGE",remoteMessage.notification?.body.toString())
 
-        pushNotification(remoteMessage)
-
+        pushNotification(remoteMessage.notification?.title,remoteMessage.notification?.body)
         super.onMessageReceived(remoteMessage)
     }
-     fun pushNotification(remoteMessage : RemoteMessage){
+     @RequiresApi(Build.VERSION_CODES.S)
+     fun pushNotification(title : String?, message : String?){
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_IMMUTABLE)
+                PendingIntent.FLAG_MUTABLE)
         } else {
             TODO("VERSION.SDK_INT < M")
         }
@@ -45,8 +49,9 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_attach)
-            .setContentTitle(remoteMessage.notification?.title)
-            .setContentText(remoteMessage.notification?.body)
+            .setContentIntent(pendingIntent)
+            .setContentTitle(title)
+            .setContentText(message)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
 
@@ -70,5 +75,4 @@ class FirebaseNotificationService : FirebaseMessagingService() {
     companion object {
         private const val TAG = "FirebaseService"
     }
-
 }
