@@ -19,10 +19,24 @@
     <fragment
         android:id="@+id/guestBookFragment"
         android:name="com.bidugunapp.ui.fragments.GuestBookFragment"
-        android:label="Guest Book" />
+        android:label="Guest Book" >
+        <action
+            android:id="@+id/action_guestBookFragment_to_addGuestWishesFragment"
+            app:destination="@id/addGuestWishesFragment"
+            app:popUpToSaveState="true"
+            app:popUpTo="@id/guestBookFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.bidugunapp.ui.fragments.ChatFragment"
         android:label="Chat" />
+    <fragment
+        android:id="@+id/addGuestWishesFragment"
+        android:name="com.bidugunapp.ui.fragments.AddGuestWishesFragment"
+        android:label="Add Wishes" >
+        <action
+            android:id="@+id/action_addGuestWishesFragment_to_guestBookFragment"
+            app:destination="@id/guestBookFragment" />
+    </fragment>
 
 </navigation>

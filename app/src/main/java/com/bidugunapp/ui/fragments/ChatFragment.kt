@@ -2,7 +2,6 @@ package com.bidugunapp.ui.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -19,12 +18,8 @@ import com.bidugunapp.model.NotificationData
 import com.bidugunapp.model.PushNotification
 import com.bidugunapp.repository.ChatRepository
 import com.bidugunapp.resources.Resources
-import com.bidugunapp.services.FirebaseNotificationService
-import com.bidugunapp.ui.MainActivity
 import com.bidugunapp.viewmodel.ChatViewModel
-import com.bidugunapp.viewmodel.GuestBookViewModel
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.messaging.RemoteMessage
 import kotlinx.android.synthetic.main.fragment_chat.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -71,7 +66,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                     NotificationData(
                         userId,
                         "HEYY"
-                    ), "/chats"
+                    ), ""
                 )
             )
         }

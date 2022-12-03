@@ -1,5 +1,6 @@
 package com.bidugunapp.ui
 
+import android.Manifest.permission.CAMERA
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.view.get
@@ -26,10 +28,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.bidugunapp.R
 import com.bidugunapp.databinding.ActivityMainBinding
-import com.bidugunapp.repository.ChatRepository
-import com.bidugunapp.repository.GuestBookRepository
 import com.bidugunapp.repository.HomePageRepository
-import com.bidugunapp.repository.PhotosRepository
 import com.bidugunapp.services.FirebaseNotificationService
 import com.bidugunapp.viewmodel.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -38,6 +37,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.ktx.messaging
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.bidugunapp.util.Constants
+import dyte.io.uikit.DyteUIKit
+import dyte.io.uikit.DyteUIKitBuilder
+import dyte.io.uikit.DyteUIKitConfig
+import io.dyte.core.models.DyteMeetingInfo
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,15 +50,21 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     private lateinit var userId : String
     private val firebaseNotificationService = FirebaseNotificationService()
+    private lateinit var dyteUIKit : DyteUIKit
 
+    val meetingInfo = DyteMeetingInfo(
+        orgId = Constants.ORGNIZATION_ID,
+        roomName = Constants.MEETING_ROOM_NAME,
+        authToken = Constants.AUTH_TOKEN,
+        enableAudio = false,
+        enableVideo = false,
+    )
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (!isGranted)
-            Toast.makeText(this, "Notifications permission denied",
-                Toast.LENGTH_LONG).show()
-    }
+    // pass in activity context for the SDK
+    val liveStreamConfig = DyteUIKitConfig(
+        activity = this,
+        dyteMeetingInfo = meetingInfo,
+    )
 
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +106,17 @@ class MainActivity : AppCompatActivity() {
         askNotificationPermission()
         setUpSplashScreen(splashScreen)
 
+        fab_liveStream.setOnClickListener {
+            // initialise an instance
+            dyteUIKit = DyteUIKitBuilder.build(liveStreamConfig)
+            dyteUIKit.loadUi()
+        }
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        dyteUIKit.leaveRoom()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -124,10 +145,16 @@ class MainActivity : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                // FCM SDK (and your app) can post notifications.
             } else {
                 // Directly ask for the permission
                 requestPermissionLauncher.launch(POST_NOTIFICATIONS)
+            }
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity,
+                    CAMERA)) {
+                ActivityCompat.requestPermissions(this@MainActivity,
+                    arrayOf(CAMERA), 1)
+            } else {
+                requestPermissionLauncher.launch(CAMERA)
             }
         }
     }
@@ -146,4 +173,30 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission is granted, you can perform your operation here
+                } else {
+                    // permission is denied, you can ask for permission again, if you want
+                    //  askForPermissions()
+                }
+                return
+            }
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (!isGranted)
+            Toast.makeText(this, "Notifications permission denied",
+                Toast.LENGTH_LONG).show()
+    }
 }

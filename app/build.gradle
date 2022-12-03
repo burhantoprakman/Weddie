@@ -107,4 +107,9 @@ dependencies {
 
     //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //Dyte live streaming
+    implementation 'io.dyte:uikit:0.0.3'
+
+
 }

@@ -5,12 +5,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bidugunapp.R
 import com.bidugunapp.adapters.GuestBookAdapter
 import com.bidugunapp.repository.GuestBookRepository
 import com.bidugunapp.resources.Resources
-import com.bidugunapp.ui.MainActivity
 import com.bidugunapp.viewmodel.GuestBookViewModel
 import kotlinx.android.synthetic.main.fragment_guest_book.*
 
@@ -63,6 +63,11 @@ class GuestBookFragment : Fragment(R.layout.fragment_guest_book) {
 
         guestBookAdapter.setOnItemClickListener {
             //OPEN DETAIL SCREEN
+        }
+
+        fab_addGuestBook.setOnClickListener {
+            val action = GuestBookFragmentDirections.actionGuestBookFragmentToAddGuestWishesFragment()
+            findNavController().navigate(action)
         }
 
     }

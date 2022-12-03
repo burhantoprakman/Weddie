@@ -54,10 +54,8 @@ class PhotosAdapter : RecyclerView.Adapter<PhotosAdapter.PhotosViewHolder>() {
             Glide.with(this).load(photos.url).into(iv_photo_item)
             tv_likesCount.text ="Liked by $likedCount"
             if(!photos.liked){
-                photos.liked = true
                 holder.itemView.ib_likes.setImageResource(R.drawable.ic_liked)
             } else {
-                photos.liked = false
                 holder.itemView.ib_likes.setImageResource(R.drawable.ic_like)
             }
         }
@@ -69,8 +67,8 @@ class PhotosAdapter : RecyclerView.Adapter<PhotosAdapter.PhotosViewHolder>() {
                 photos.liked = false
                 holder.itemView.ib_likes.setImageResource(R.drawable.ic_like)
             }
-            //Send data to server for liked
         }
+
     }
 
     override fun getItemCount(): Int {

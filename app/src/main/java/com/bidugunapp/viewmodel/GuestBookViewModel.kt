@@ -23,7 +23,7 @@ class GuestBookViewModel(application: Application, private val repository: Guest
         getGuestBookList()
     }
 
-    fun getGuestBookList() = viewModelScope.launch(Dispatchers.IO) {
+    private fun getGuestBookList() = viewModelScope.launch(Dispatchers.IO) {
         guestBookList.postValue(Resources.Loading())
         val response = repository.getGuestBookList()
         guestBookList.postValue(handleGuestBookResponse(response))
@@ -37,6 +37,10 @@ class GuestBookViewModel(application: Application, private val repository: Guest
             }
         }
         return Resources.Error(response.message())
+    }
+
+    fun addWishes(guestBookResponse: GuestBookResponse) = viewModelScope.launch(Dispatchers.IO) {
+      repository.addWishes(guestBookResponse)
     }
 
     @Suppress("UNCHECKED_CAST")
