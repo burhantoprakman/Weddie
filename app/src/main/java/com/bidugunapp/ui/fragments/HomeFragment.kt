@@ -7,29 +7,35 @@ import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.bidugunapp.R
 import com.bidugunapp.adapters.HomePageViewPagerAdapter
 import com.bidugunapp.resources.Resources
 import com.bidugunapp.ui.MainActivity
 import com.bidugunapp.util.Constants.Companion.HOME_PAGE_PHOTOS_DELAY_TIME_MS
 import com.bidugunapp.viewmodel.HomePageViewModel
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlin.math.abs
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), OnMapReadyCallback {
     private lateinit var viewPager: ViewPager2
     private lateinit var handler: Handler
     private lateinit var homePageViewModel : HomePageViewModel
     private lateinit var adapter: HomePageViewPagerAdapter
     private var photosList: MutableList<String> = ArrayList()
+    private var googleMapLocationLat : Double = 0.0
+    private var googleMapLocationLng : Double = 0.0
+    private lateinit var googleMap : GoogleMap
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,6 +57,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         val dessert = eventResponse.foodMenu.tatli
                         val soup = eventResponse.foodMenu.corba
                         val appetizer = eventResponse.foodMenu.aperatif
+
+                        showLocation(eventResponse.gmapsLocationLat.toDouble(),
+                            eventResponse.gmapsLocationLng.toDouble())
+
                         tv_menu.text =
                             " Main menu :$mainMenu \n Dessert : $dessert \n Soup : $soup \n Appetizer : $appetizer"
                     }
@@ -75,6 +85,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 handler.postDelayed(runnable, HOME_PAGE_PHOTOS_DELAY_TIME_MS)
             }
         })
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -113,5 +127,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             page.scaleY = 0.85f + r * 0.14f
         }
         viewPager.setPageTransformer(transformer)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        this.googleMap  =googleMap
+    }
+
+    private fun showLocation(lat : Double , lng : Double){
+        val location = LatLng(lat, lng)
+        googleMap.addMarker(MarkerOptions().position(location).title(""))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        googleMap.setMinZoomPreference(12f)
     }
 }
